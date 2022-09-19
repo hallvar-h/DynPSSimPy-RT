@@ -1,8 +1,7 @@
-import sys  # We need sys so that we can pass argv to QApplication
 import sys
 import numpy as np
 from synchrophasor.simplePMU import SimplePMU
-from src.dpsrt.interfacing import InterfacerQueuesThread
+from .interfacing import InterfacerQueuesThread
 
 
 class PMUPublisher(InterfacerQueuesThread):

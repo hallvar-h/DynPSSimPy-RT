@@ -1,12 +1,12 @@
 import multiprocessing as mp
-from src.dpsrt.interfacing import QueueManager, InterfaceListener
+from src.dynpssimpy_rt.interfacing import QueueManager, InterfaceListener
 from PySide6 import QtWidgets
-from src.dpsrt.rtsim_plot import SyncPlot
+from src.dynpssimpy_rt.rtsim_plot import SyncPlot
 import sys
-from src.dpsrt.rtsim_plot import RTSimPlot
+from src.dynpssimpy_rt.rtsim_plot import RTSimPlot
 import dynpssimpy.dynamic as dps
-from src.dpsrt.sim import RealTimeSimulatorThread
-from src.dpsrt.gui import LineOutageWidget
+from src.dynpssimpy_rt.sim import RealTimeSimulatorThread
+from src.dynpssimpy_rt.gui import LineOutageWidget
 
 
 def main_pod(qm_kwargs):

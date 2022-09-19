@@ -1,14 +1,14 @@
 import dynpssimpy.dynamic as dps
 import dynpssimpy.solvers as dps_sol
-from src.dpsrt.sim import RealTimeSimulator, RealTimeSimulatorThread
+from src.dynpssimpy_rt.sim import RealTimeSimulator, RealTimeSimulatorThread
 import threading
 import time
 import sys
 from PySide6 import QtWidgets
-from src.dpsrt.gui import LineOutageWidget
-from src.dpsrt.time_window_plot import TimeWindowPlot
-from src.dpsrt.rtsim_plot import RTSimPlot, SyncPlot
-from src.dpsrt.pmu import PMUPublisher
+from src.dynpssimpy_rt.gui import LineOutageWidget
+from src.dynpssimpy_rt.time_window_plot import TimeWindowPlot
+from src.dynpssimpy_rt.rtsim_plot import RTSimPlot, SyncPlot
+from src.dynpssimpy_rt.pmu import PMUPublisher
 
 
 def main():

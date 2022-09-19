@@ -1,13 +1,13 @@
 import dynpssimpy.dynamic as dps
 import dynpssimpy.solvers as dps_sol
-from src.dpsrt.sim import RealTimeSimulator, RealTimeSimulatorThread
+from src.dynpssimpy_rt.sim import RealTimeSimulator, RealTimeSimulatorThread
 import threading
 import time
 import sys
 from PySide6 import QtWidgets
-from src.dpsrt.gui import LineOutageWidget, SimulationControl
-from src.dpsrt.time_window_plot import TimeWindowPlot
-from src.dpsrt.rtsim_plot import RTSimPlot, SyncPlot
+from src.dynpssimpy_rt.gui import LineOutageWidget, SimulationControl
+from src.dynpssimpy_rt.time_window_plot import TimeWindowPlot
+from src.dynpssimpy_rt.rtsim_plot import RTSimPlot, SyncPlot
 
 
 class GenSpeedPlot(RTSimPlot):

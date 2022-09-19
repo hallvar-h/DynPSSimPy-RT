@@ -1,5 +1,5 @@
 import numpy as np
-from src.dpsrt.time_window import TimeWindow
+from .time_window import TimeWindow
 import PySide6.QtCore as QtCore
 import pyqtgraph as pg
 
