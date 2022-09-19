@@ -20,7 +20,7 @@ classifiers = [
 dependencies = [
 	"numpy",
 	"scipy",
-#	"synchrophasor @ git+https://github.com/hallvar-h/pypmu",
+	"synchrophasor @ git+https://github.com/hallvar-h/pypmu",
 	]
 
 [project.urls]
