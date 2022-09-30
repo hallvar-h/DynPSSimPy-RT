@@ -1,13 +1,13 @@
 import multiprocessing as mp
-from src.dynpssimpy_rt.interfacing import QueueManager, InterfaceListener
+from src.dynpssimrt.interfacing import QueueManager, InterfaceListener
 from PySide6 import QtWidgets
-from src.dynpssimpy_rt.rtsim_plot import SyncPlot
+from src.dynpssimrt.rtsim_plot import SyncPlot
 import sys
-from src.dynpssimpy_rt.rtsim_plot import RTSimPlot
+from src.dynpssimrt.rtsim_plot import RTSimPlot
 import dynpssimpy.dynamic as dps
-from src.dynpssimpy_rt.sim import RealTimeSimulatorThread
-from src.dynpssimpy_rt.gui import LineOutageWidget
-from src.dynpssimpy_rt.pmu import PMUPublisher
+from src.dynpssimrt.sim import RealTimeSimulatorThread
+from src.dynpssimrt.gui import LineOutageWidget
+from src.dynpssimrt.pmu import PMUPublisher
 
 
 def main_pmu(qm_kwargs):

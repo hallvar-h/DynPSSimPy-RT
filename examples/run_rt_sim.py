@@ -1,6 +1,6 @@
 import dynpssimpy.dynamic as dps
 import dynpssimpy.solvers as dps_sol
-from src.dynpssimpy_rt.sim import RealTimeSimulator
+from src.dynpssimrt.sim import RealTimeSimulator
 import threading
 import time
 

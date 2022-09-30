@@ -1,10 +1,10 @@
 import dynpssimpy.dynamic as dps
 import dynpssimpy.solvers as dps_sol
-from src.dynpssimpy_rt.sim import RealTimeSimulator, RealTimeSimulatorThread
+from src.dynpssimrt.sim import RealTimeSimulator, RealTimeSimulatorThread
 import sys
 from PySide6 import QtWidgets
-from src.dynpssimpy_rt.gui import LineOutageWidget
-from src.dynpssimpy_rt.rtsim_plot import RTSimPlot, SyncPlot
+from src.dynpssimrt.gui import LineOutageWidget
+from src.dynpssimrt.rtsim_plot import RTSimPlot, SyncPlot
 import pyqtgraph as pg
 import pyqtgraph.console
 import numpy as np

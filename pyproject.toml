@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dynpssimpy_rt"
+name = "dynpssimrt"
 description = ''
 readme = "README.md"
 requires-python = ">=3.7"
