@@ -23,7 +23,7 @@ dependencies = [
 	"synchrophasor @ git+https://github.com/hallvar-h/pypmu",
 	"dynpssimpy @ git+https://github.com/hallvar-h/DynPSSimPy@SubModules",
 	"PySide6",
-	"pygtgraph",	
+	"pyqtgraph",
 	]
 
 [project.urls]
