@@ -1,12 +1,12 @@
 import multiprocessing as mp
-from src.dynpssimrt.interfacing import QueueManager, InterfaceListener
+from dynpssimrt.interfacing import QueueManager, InterfaceListener
 from PySide6 import QtWidgets
-from src.dynpssimrt.rtsim_plot import SyncPlot
+from dynpssimrt.rtsim_plot import SyncPlot
 import sys
-from src.dynpssimrt.rtsim_plot import RTSimPlot
+from dynpssimrt.rtsim_plot import RTSimPlot
 import dynpssimpy.dynamic as dps
-from src.dynpssimrt.sim import RealTimeSimulatorThread
-from src.dynpssimrt.gui import LineOutageWidget
+from dynpssimrt.sim import RealTimeSimulatorThread
+from dynpssimrt.gui import LineOutageWidget
 
 
 def main_pod(qm_kwargs):
@@ -19,12 +19,12 @@ def main_pod(qm_kwargs):
 
     sync_plot = SyncPlot(n_samples=1000, update_freq=50)
     sync_plot_2 = SyncPlot(n_samples=1000, update_freq=10)
-    # tw_plot = RTSimPlot(n_samples=1000)
+    tw_plot = RTSimPlot(n_samples=1000)
 
-    [InterfaceListener.send_interface_init(manager, interface) for interface in [sync_plot, sync_plot_2]]
+    [InterfaceListener.send_interface_init(manager, interface) for interface in [sync_plot, sync_plot_2, tw_plot]]
     sync_plot.start()
     sync_plot_2.start()
-    # tw_plot.start()
+    tw_plot.start()
 
     app.exec()
 
