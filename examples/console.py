@@ -1,12 +1,12 @@
 import dynpssimpy.dynamic as dps
 import dynpssimpy.solvers as dps_sol
-from src.dynpssimrt.sim import RealTimeSimulator, RealTimeSimulatorThread
+from dynpssimrt.sim import RealTimeSimulator, RealTimeSimulatorThread
 import sys
 from PySide6 import QtWidgets
-from src.dynpssimrt.gui import LineOutageWidget
-from src.dynpssimrt.rtsim_plot import RTSimPlot, SyncPlot
+from dynpssimrt.gui import LineOutageWidget
+from dynpssimrt.rtsim_plot import RTSimPlot, SyncPlot
 import pyqtgraph as pg
-import pyqtgraph.console
+from pyqtgraph.console import ConsoleWidget
 import numpy as np
 
 
@@ -36,7 +36,7 @@ def main():
     # Add Control Widgets
     line_outage_ctrl = LineOutageWidget(rts)
 
-    c = pyqtgraph.console.ConsoleWidget(namespace={'pg': pg, 'np': np, 'rts': rts}, text='')
+    c = ConsoleWidget(namespace={'pg': pg, 'np': np, 'rts': rts}, text='')
     c.show()
 
     app.exec()
