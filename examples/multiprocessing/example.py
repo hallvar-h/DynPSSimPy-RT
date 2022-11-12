@@ -7,6 +7,7 @@ from dynpssimrt.rtsim_plot import RTSimPlot
 import dynpssimpy.dynamic as dps
 from dynpssimrt.sim import RealTimeSimulatorThread
 from dynpssimrt.gui import LineOutageWidget
+from dynpssimrt.plotting.phasor_plots import VoltagePhasorPlot, GenPhasorPlot
 
 
 def main_pod(qm_kwargs):
@@ -20,11 +21,15 @@ def main_pod(qm_kwargs):
     sync_plot = SyncPlot(n_samples=1000, update_freq=50)
     sync_plot_2 = SyncPlot(n_samples=1000, update_freq=10)
     tw_plot = RTSimPlot(n_samples=1000)
+    voltage_phasor_plot = VoltagePhasorPlot(update_freq=50)
+    gen_phasor_plot = GenPhasorPlot(update_freq=50)
 
-    [InterfaceListener.send_interface_init(manager, interface) for interface in [sync_plot, sync_plot_2, tw_plot]]
+    [InterfaceListener.send_interface_init(manager, interface) for interface in [sync_plot, sync_plot_2, tw_plot, voltage_phasor_plot, gen_phasor_plot]]
     sync_plot.start()
     sync_plot_2.start()
     tw_plot.start()
+    voltage_phasor_plot.start()
+    gen_phasor_plot.start()
 
     app.exec()
 

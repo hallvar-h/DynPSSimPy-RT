@@ -4,11 +4,10 @@ from PySide6 import QtWidgets, QtCore
 
 
 class PhasorPlot(QtWidgets.QWidget):
-    def __init__(self, rts, update_freq=50, *args, **kwargs):
+    def __init__(self, n_phasors, update_freq=50, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rts = rts
-        self.ps = rts.ps
-        self.dt = self.rts.dt
+
+        self.n_phasors = n_phasors
 
         # if isinstance(gen_mdls, list):
         #     self.gen_mdls = self.gen_mdls
@@ -20,17 +19,21 @@ class PhasorPlot(QtWidgets.QWidget):
 
 
         self.colors = lambda i: pg.intColor(i, hues=9, values=1, maxValue=255, minValue=150, maxHue=360, minHue=0, sat=255, alpha=255)
+        
         # Phasor diagram
         self.graphWidget = pg.GraphicsLayoutWidget(show=True, title="Phasors")
+        self.graphWidget.show()
         # self.setCentralWidget(self.graphWidget)
 
         self.phasor_0 = np.array([0, 1, 0.9, 1, 0.9, 1]) + 1j * np.array([0, 0, -0.1, 0, 0.1, 0])
         plot_win_ph = self.graphWidget.addPlot(title='Phasors')
         plot_win_ph.setAspectLocked(True)
 
-        angle = np.concatenate([self.rts.x[gen_mdl.idx][gen_mdl.state_idx['angle']] for gen_mdl in self.ps.gen_mdls.values()])
-        angle -= np.mean(angle)
-        magnitude = np.concatenate([gen_mdl.input['E_f'] for gen_mdl in self.ps.gen_mdls.values()])
+        # angle = np.concatenate([self.rts.x[gen_mdl.idx][gen_mdl.state_idx['angle']] for gen_mdl in self.ps.gen_mdls.values()])
+        # angle -= np.mean(angle)
+        # magnitude = np.concatenate([gen_mdl.input['E_f'] for gen_mdl in self.ps.gen_mdls.values()])
+        angle = np.zeros(self.n_phasors)
+        magnitude = np.ones(self.n_phasors)
         phasors = magnitude*np.exp(1j*angle)
 
         self.pl_ph = []
@@ -47,16 +50,42 @@ class PhasorPlot(QtWidgets.QWidget):
 
         self.graphWidget.show()
 
-        self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.update)
-        self.timer.start(1000//update_freq)
+        # self.timer = QtCore.QTimer()
+        # self.timer.timeout.connect(self.update)
+        # self.timer.start(1000//update_freq)
 
-    def update(self):
+    def update(self, phasors):
         # if not np.isclose(self.ts_keeper.time[-1], self.ps.time):
         # Phasors:
-        angle = np.concatenate([self.rts.x[gen_mdl.idx][gen_mdl.state_idx['angle']] for gen_mdl in self.ps.gen_mdls.values()])
-        angle -= np.mean(angle)
-        magnitude = np.concatenate([gen_mdl.input['E_f'] for gen_mdl in self.ps.gen_mdls.values()])
-        phasors = magnitude * np.exp(1j * angle)
+        # angle = np.concatenate([self.rts.x[gen_mdl.idx][gen_mdl.state_idx['angle']] for gen_mdl in self.ps.gen_mdls.values()])
+        # angle -= np.mean(angle)
+        # magnitude = np.concatenate([gen_mdl.input['E_f'] for gen_mdl in self.ps.gen_mdls.values()])
+        # phasors = magnitude * np.exp(1j * angle)
         for i, (pl_ph, phasor) in enumerate(zip(self.pl_ph, phasors[:, None]*self.phasor_0)):
             pl_ph.setData(phasor.real, phasor.imag)
+
+
+def main():
+    
+    n_phasors = 10
+    app = QtWidgets.QApplication()
+    phasor_plot = PhasorPlot(n_phasors=n_phasors)
+
+    import time
+    def update_plot():
+        while True:
+            new_phasors = np.random.randn(n_phasors) + 1j*np.random.randn(n_phasors)
+            phasor_plot.update(phasors=new_phasors)
+            time.sleep(0.1)
+
+    import threading
+    thr = threading.Thread(target=update_plot, daemon=True)
+    thr.start()
+
+    app.exec()
+
+
+
+
+if __name__ == '__main__':
+    main()

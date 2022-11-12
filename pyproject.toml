@@ -24,6 +24,9 @@ dependencies = [
 	"dynpssimpy @ git+https://github.com/hallvar-h/DynPSSimPy@SubModules",
 	"PySide6",
 	"pyqtgraph",
+	"networkx",
+	"PyOpenGL",
+	"PyOpenGL_accelerate",
 	]
 
 [project.urls]

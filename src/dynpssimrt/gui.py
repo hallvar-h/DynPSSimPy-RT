@@ -93,7 +93,6 @@ class DynamicLoadControlWidget(QtWidgets.QWidget):
         #print('t={:.2f}s'.format(self.rts.sol.t) + ': Line ' + self.sender().accessibleName() + ' '+ action + 'ed.')
 
 
-
 class SimulationControl(QtWidgets.QWidget):
     def __init__(self, rts, *args, **kwargs):
         super().__init__(*args, **kwargs)
