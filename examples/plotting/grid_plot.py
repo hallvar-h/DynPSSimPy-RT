@@ -26,7 +26,8 @@ def main():
 
     sync_plot = SyncPlot(rts=rts, n_samples=1000, update_freq=25)
     voltage_phasor_plot = VoltagePhasorPlot(rts, update_freq=25)
-    grid_plot = LiveGridPlot3D(rts=rts, z_ax='angle')
+    grid_plot = LiveGridPlot3D(rts=rts, z_ax='abs_pu')
+    # grid_plot = LiveGridPlot3D(rts=rts, z_ax='angle')
     # sync_plot_2 = SyncPlot(n_samples=1000, update_freq=10)
     time.sleep(1)
     rts.start()

@@ -1,5 +1,6 @@
 from PySide6 import QtWidgets, QtCore
 from pyqtgraph.console import ConsoleWidget
+import numpy as np
 
 
 class LineOutageWidget(QtWidgets.QWidget):
@@ -14,17 +15,25 @@ class LineOutageWidget(QtWidgets.QWidget):
         self.ctrlWidget = QtWidgets.QWidget()
         self.ctrlWidget.setWindowTitle('Lines')
 
-        layout_box = QtWidgets.QVBoxLayout()
+        lines_per_col = 10
+        layout_box = QtWidgets.QGridLayout()
+
         self.check_boxes = []
+        n_lines = self.ps.lines['Line'].n_units
+        n_cols = np.ceil(n_lines/lines_per_col)
         for i, line in enumerate(self.ps.lines['Line'].par):
             check_box = QtWidgets.QCheckBox(line['name'])
             check_box.setChecked(True)
             check_box.stateChanged.connect(self.updateLines)
             check_box.setAccessibleName(line['name'])
 
-            layout_box.addWidget(check_box)
+            row = i%lines_per_col
+            col = int((i - row)/lines_per_col)
+            
+            layout_box.addWidget(check_box, row, col)
             # layout_box.addSpacing(15)
-            layout_box.addSpacing(0)
+            # layout_box.addSpacing(0)
+        
 
         self.ctrlWidget.setLayout(layout_box)
         self.ctrlWidget.show()

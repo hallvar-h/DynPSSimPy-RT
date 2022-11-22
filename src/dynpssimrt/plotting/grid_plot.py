@@ -22,11 +22,11 @@ class GridPlot3D(QtWidgets.QWidget):
         offset_z,
         scale=10,
         update_freq=50,
-        z_ax='angle',
+        # z_ax='angle',
         use_colors=False
     ):
         super().__init__()
-        self.z_ax = z_ax
+        # self.z_ax = z_ax
         self.scale = scale
 
         # nx.draw(G)
