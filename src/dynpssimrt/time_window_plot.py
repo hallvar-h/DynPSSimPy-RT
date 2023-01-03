@@ -24,9 +24,10 @@ class TimeWindowPlot(TimeWindow):
 
         self.graphWidget.show()
 
-        self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.update_plot)
-        self.timer.start(1000 // update_freq)
+        if update_freq is not None:
+            self.timer = QtCore.QTimer()
+            self.timer.timeout.connect(self.update_plot)
+            self.timer.start(1000 // update_freq)
 
     def update_plot(self):
         time_stamps = self.get_time()

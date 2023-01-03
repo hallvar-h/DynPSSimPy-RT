@@ -12,10 +12,13 @@ class VoltagePhasorPlot(InterfacerQueuesThread):
 
     @staticmethod
     def get_init_data(rts):
-        return rts.ps.n_bus
+        return rts.ps.n_bus, rts.ps.v_0
 
     def initialize(self, init_data):
-        n_phasors = init_data
+        n_phasors, v_0 = init_data
+        self.angles_prev = np.angle(v_0)
+        self.angles_prev = np.unwrap(self.angles_prev)
+
         self.phasor_plot = PhasorPlot(n_phasors, update_freq=self.update_freq)
 
     @staticmethod
@@ -23,21 +26,38 @@ class VoltagePhasorPlot(InterfacerQueuesThread):
         return rts.ps.red_to_full.dot(rts.sol.v)
 
     def update(self, input):
+        phasors = input
+        angle = np.angle(input)
+        angle = np.unwrap(np.vstack([self.angles_prev, angle]), axis=0)[1, :]
+        self.angles_prev[:] = angle
+
+        if self.subtract_mean:
+            angle -= np.mean(angle)
+        phasors_rot = abs(phasors)*np.exp(1j*angle)
         # Update internal states
-        self.phasor_plot.update(input)
+        self.phasor_plot.update(phasors_rot)
 
 
 class GenPhasorPlot(VoltagePhasorPlot):
     @staticmethod
     def get_init_data(rts):
-        return rts.ps.gen['GEN'].n_units
+        gen_mdl = rts.ps.gen['GEN']
+        angle = rts.sol.x[gen_mdl.state_idx_global['angle']]
+        return angle
+
+    def initialize(self, init_data):
+        angle = init_data
+
+        self.angles_prev = angle
+        self.angles_prev = np.unwrap(self.angles_prev)
+        n_phasors = len(angle)
+        self.phasor_plot = PhasorPlot(n_phasors, update_freq=self.update_freq)
 
     @staticmethod
     def read_input_signal(rts):
         gen_mdl = rts.ps.gen['GEN']
         angle = rts.sol.x[gen_mdl.state_idx_global['angle']]
         magnitude = gen_mdl.E_f(rts.sol.x, rts.sol.v)
-
         return angle, magnitude
 
     def update(self, input):

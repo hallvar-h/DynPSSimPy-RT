@@ -12,7 +12,6 @@ class PMUPublisher(InterfacerQueuesThread):
         super().__init__(rts=rts, name=name, fs=fs, *args, **kwargs)
         # ps = rts.ps
 
-
     @staticmethod
     def get_init_data(rts):
         station_names = list(rts.ps.buses['name'])

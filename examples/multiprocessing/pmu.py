@@ -1,13 +1,13 @@
 import multiprocessing as mp
-from src.dynpssimrt.interfacing import QueueManager, InterfaceListener
+from dynpssimrt.interfacing import QueueManager, InterfaceListener
 from PySide6 import QtWidgets
-from src.dynpssimrt.rtsim_plot import SyncPlot
+from dynpssimrt.rtsim_plot import SyncPlot
 import sys
-from src.dynpssimrt.rtsim_plot import RTSimPlot
+from dynpssimrt.rtsim_plot import RTSimPlot
 import dynpssimpy.dynamic as dps
-from src.dynpssimrt.sim import RealTimeSimulatorThread
-from src.dynpssimrt.gui import LineOutageWidget
-from src.dynpssimrt.pmu import PMUPublisher
+from dynpssimrt.sim import RealTimeSimulatorThread
+from dynpssimrt.gui import LineOutageWidget
+from dynpssimrt.pmu import PMUPublisher
 
 
 def main_pmu(qm_kwargs):
@@ -44,7 +44,8 @@ def main(qm_kwargs):
     interface_listener = InterfaceListener(init_queue)
 
     # import dynpssimpy.ps_models.k2a as model_data
-    import examples.test_systems.n44_ctrl as model_data
+    # import examples.test_systems.n44_ctrl as model_data
+    import dynpssimpy.ps_models.ieee39 as model_data
 
     model = model_data.load()
 

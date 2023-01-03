@@ -176,6 +176,7 @@ class GridPlot3D(QtWidgets.QWidget):
 class LiveGridPlot3D(InterfacerQueuesThread):
     def __init__(self, rts=None, update_freq=50, z_ax='angle', use_colors=False, *args, **kwargs):
         self.z_ax = z_ax
+        self.use_colors=use_colors
         InterfacerQueuesThread.__init__(self, rts, fs=update_freq)
         
         
@@ -188,10 +189,10 @@ class LiveGridPlot3D(InterfacerQueuesThread):
         line_admittances_ = ps.lines['Line'].admittance
         trafo_admittances_ = ps.trafos['Trafo'].admittance
         # v_n = ps.
-        return bus_names, line_par, trafo_par, line_admittances_, trafo_admittances_ 
+        return bus_names, line_par, trafo_par, line_admittances_, trafo_admittances_, rts.ps.v_0
 
     def initialize(self, init_data):
-        bus_names, line_par, trafo_par, line_admittances_, trafo_admittances_  = init_data
+        bus_names, line_par, trafo_par, line_admittances_, trafo_admittances_, v_0  = init_data
         self.n_bus = len(bus_names)
         # v_n = 
         n_lines = len(line_par)
@@ -241,7 +242,12 @@ class LiveGridPlot3D(InterfacerQueuesThread):
             from_buses_all,
             to_buses_all,
             self.offset_z,
+            use_colors=self.use_colors
         )
+
+        self.angles_prev = np.angle(v_0)
+        self.angles_prev = np.unwrap(self.angles_prev)
+        
 
     @staticmethod
     def read_input_signal(rts):
@@ -254,11 +260,18 @@ class LiveGridPlot3D(InterfacerQueuesThread):
         
         v = voltages
         if self.z_ax == 'angle':
-            gen_mean_angle = np.mean(np.unwrap(gen_angles))
-            v_angle = np.angle(v) - gen_mean_angle
-            v_angle = (v_angle + np.pi) % (2*np.pi) - np.pi
-            v_angle -= np.mean(v_angle)
-            k = v_angle
+
+            angle = np.angle(v)
+            angle = np.unwrap(np.vstack([self.angles_prev, angle]), axis=0)[1, :]
+            self.angles_prev[:] = angle
+            angle -= np.mean(angle)
+            k = angle
+            
+            # gen_mean_angle = np.mean(np.unwrap(gen_angles))
+            # v_angle = np.angle(v) - gen_mean_angle
+            # v_angle = (v_angle + np.pi) % (2*np.pi) - np.pi
+            # v_angle -= np.mean(v_angle)
+            # k = v_angle
             self.z = self.scale_z*k + self.offset_z
         elif self.z_ax in ['abs', 'abs_pu']:
             k = abs(v)

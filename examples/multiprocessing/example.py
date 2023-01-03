@@ -6,8 +6,9 @@ import sys
 from dynpssimrt.rtsim_plot import RTSimPlot
 import dynpssimpy.dynamic as dps
 from dynpssimrt.sim import RealTimeSimulatorThread
-from dynpssimrt.gui import LineOutageWidget
+from dynpssimrt.gui import LineOutageWidget, ConsoleWidget
 from dynpssimrt.plotting.phasor_plots import VoltagePhasorPlot, GenPhasorPlot
+from dynpssimrt.plotting.grid_plot import LiveGridPlot3D
 
 
 def main_pod(qm_kwargs):
@@ -23,13 +24,15 @@ def main_pod(qm_kwargs):
     tw_plot = RTSimPlot(n_samples=1000)
     voltage_phasor_plot = VoltagePhasorPlot(update_freq=50)
     gen_phasor_plot = GenPhasorPlot(update_freq=50)
+    grid_plot = LiveGridPlot3D(z_ax='angle', use_colors=True)
 
-    [InterfaceListener.send_interface_init(manager, interface) for interface in [sync_plot, sync_plot_2, tw_plot, voltage_phasor_plot, gen_phasor_plot]]
+    [InterfaceListener.send_interface_init(manager, interface) for interface in [sync_plot, sync_plot_2, tw_plot, voltage_phasor_plot, gen_phasor_plot, grid_plot]]
     sync_plot.start()
     sync_plot_2.start()
     tw_plot.start()
     voltage_phasor_plot.start()
     gen_phasor_plot.start()
+    grid_plot.start()
 
     app.exec()
 
@@ -62,6 +65,8 @@ def main(qm_kwargs):
 
     # Add Control Widgets
     line_outage_ctrl = LineOutageWidget(rts)
+    c = ConsoleWidget(namespace={'rts': rts}, text='')
+    c.show()
 
     rts.start()
     app.exec()
