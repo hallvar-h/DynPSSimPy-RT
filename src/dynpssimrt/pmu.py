@@ -5,9 +5,10 @@ from .interfacing import InterfacerQueuesThread
 
 
 class PMUPublisher(InterfacerQueuesThread):
-    def __init__(self, rts=None, ip='10.0.0.16', port=1410, name='PMUPublisher', fs=100, set_timestamp=False, publish_frequency=10, *args, **kwargs):
+    def __init__(self, rts=None, ip='10.0.0.16', port=1410, pdc_id=1, name='PMUPublisher', fs=100, set_timestamp=False, publish_frequency=10, *args, **kwargs):
         self.ip = ip
         self.port = port
+        self.pdc_id=pdc_id
         fs = publish_frequency
         super().__init__(rts=rts, name=name, fs=fs, *args, **kwargs)
         # ps = rts.ps
@@ -24,6 +25,7 @@ class PMUPublisher(InterfacerQueuesThread):
             self.ip, self.port,
             station_names=station_names,
             channel_names=channel_names,
+            pdc_id=self.pdc_id,
             set_timestamp=False,
             publish_frequency=self.fs,
         )
