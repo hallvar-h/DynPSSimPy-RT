@@ -1,6 +1,6 @@
 import dynpssimpy.dynamic as dps
 import dynpssimpy.solvers as dps_sol
-from src.dynpssimrt.sim import RealTimeSimulator
+from dynpssimrt.sim import RealTimeSimulator
 import threading
 import time
 
@@ -17,7 +17,8 @@ if __name__ == '__main__':
     ps.init_dyn_sim()
 
     ps.ode_fun(0, ps.x0)
-    rts = RealTimeSimulator(ps, dt=2.5e-3, speed=1, solver=dps_sol.ModifiedEulerDAE)
+    rts = RealTimeSimulator(ps, dt=1e-3, speed=1, solver=dps_sol.ModifiedEulerDAE)
+    # rts.sol.n_it = 0
 
     rts_thread = threading.Thread(target=rts.main_loop, daemon=True)
     rts_thread.start()

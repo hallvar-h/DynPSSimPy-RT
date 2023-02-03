@@ -21,7 +21,7 @@ dependencies = [
 	"numpy",
 	"scipy",
 	"synchrophasor @ git+https://github.com/hallvar-h/pypmu",
-	"dynpssimpy @ git+https://github.com/hallvar-h/DynPSSimPy@SubModules",
+	"dynpssimpy @ git+https://github.com/hallvar-h/DynPSSimPy",
 	"PySide6",
 	"pyqtgraph",
 	"networkx",
