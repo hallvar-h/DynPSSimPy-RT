@@ -16,7 +16,7 @@ def main_pmu(qm_kwargs, ip, port, pdc_id):
     manager.connect()
 
 
-    pmus = PMUPublisher(publish_frequency=25, phasors=['v_g'], ip=ip, port=port, pdc_id=pdc_id)
+    pmus = PMUPublisher(publish_frequency=25, ip=ip, port=port, pdc_id=pdc_id)
 
     InterfaceListener.send_interface_init(manager, pmus)
     pmus.start()

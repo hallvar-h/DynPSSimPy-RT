@@ -19,7 +19,7 @@ def main(ip, port, pdc_id):
     ps.ode_fun(0, ps.x0)
     rts = RealTimeSimulatorThread(ps, dt=10e-3, speed=1, solver=dps_sol.ModifiedEulerDAE)
 
-    pmus = PMUPublisher(rts, publish_frequency=5, phasors=['v_g'], ip=ip, port=port, pdc_id=pdc_id)
+    pmus = PMUPublisher(rts, publish_frequency=5, ip=ip, port=port, pdc_id=pdc_id)
     pmus.start()
     rts.start()
     time.sleep(3)

@@ -13,6 +13,7 @@ from dynpssimrt.pmu_currents import PMUPublisherCurrents
 def main_pmu(qm_kwargs):
     import socket
     ip = socket.gethostbyname(socket.gethostname())  # Get local ip automatically
+    # ip = 'localhost'
     port = 50000
 
     manager = QueueManager(**qm_kwargs)
@@ -24,7 +25,7 @@ def main_pmu(qm_kwargs):
 
     sync_plot = SyncPlot(n_samples=1000, update_freq=50)
     tw_plot = RTSimPlot(n_samples=1000)
-    pmus = PMUPublisherCurrents(publish_frequency=25, phasors=['v_g'], ip=ip, port=port)
+    pmus = PMUPublisherCurrents(publish_frequency=25, stations=['10', '13', '20'], ip=ip, port=port)
 
     [InterfaceListener.send_interface_init(manager, interface) for interface in [sync_plot, pmus, tw_plot]]
     sync_plot.start()
