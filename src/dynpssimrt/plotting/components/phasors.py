@@ -22,7 +22,7 @@ class PhasorPlot(QtWidgets.QWidget):
         
         # Phasor diagram
         self.graphWidget = pg.GraphicsLayoutWidget(show=True, title="Phasors")
-        self.graphWidget.show()
+        # self.graphWidget.show()
         # self.setCentralWidget(self.graphWidget)
 
         self.phasor_0 = np.array([0, 1, 0.9, 1, 0.9, 1]) + 1j * np.array([0, 0, -0.1, 0, 0.1, 0])

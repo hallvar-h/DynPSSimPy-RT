@@ -89,7 +89,7 @@ if __name__ == '__main__':
     hostname = socket.gethostname()
     ip = socket.gethostbyname(hostname)
     port = 50000
-    qm_kwargs = dict(address=(ip, 50000), authkey=b'abracadabra')
+    qm_kwargs = dict(address=(ip, port), authkey=b'abracadabra')
 
     p_server = mp.Process(target=main_server, args=(qm_kwargs,))
     p_server.start()

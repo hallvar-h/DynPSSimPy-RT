@@ -5,39 +5,28 @@ import threading
 import time
 import sys
 from PySide6 import QtWidgets
-from dynpssimrt.gui import LineOutageWidget
+from dynpssimrt.gui import LineOutageWidget, DynamicLoadControlWidget
 from dynpssimrt.time_window_plot import TimeWindowPlot
+from dynpssimrt.rtsim_plot import SyncPlot
+from dynpssimrt.plotting.phasor_plots import VoltagePhasorPlot
+from dynpssimrt.plotting.grid_plot import LiveGridPlot3D
 
 
 def main(rts):
     update_freq = 25
     app = QtWidgets.QApplication(sys.argv)
 
-    tw_plot = TimeWindowPlot(n_samples=100, n_cols=len(rts.sol.x[0:1]))
+    sync_plot = SyncPlot(rts=rts, n_samples=1000, update_freq=25)
+    voltage_phasor_plot = VoltagePhasorPlot(rts, update_freq=50)
+    grid_plot = LiveGridPlot3D(rts=rts, z_ax='angle')
 
-    def update_tw():
-        while True:
-            time.sleep(0.01)
-            # tw.append(time.time(), np.random.randn(10))
-            tw_plot.append(rts.sol.t, rts.sol.x[0:1])
-
-    update_tw_thread = threading.Thread(target=update_tw, daemon=True)
-    update_tw_thread.start()
-
-
-    # tw_plot = TimeWindowPlot(rts, ['gen', 'GEN', 'state', 'speed'])
-    # mdl_type = 'gen'
-    # mdl = 'GEN'
-    #
-    # getattr(rts.ps, mdl_type)[]
-
-    # tw = TimeWindow(100, n_cols)
-    # def update_tw():
-    #     tw.append(rts.sol.t)
-    # time_series_plot = TimeWindowPlot(tw)
+    sync_plot.start()
+    voltage_phasor_plot.start()
+    grid_plot.start()
 
     # Add Control Widgets
     line_outage_ctrl = LineOutageWidget(rts)
+    load_control = DynamicLoadControlWidget(rts)
 
     app.exec()
 
@@ -51,12 +40,13 @@ if __name__ == '__main__':
     # import ps_models.sm_ib as model_data
 
     model = model_data.load()
+    model['loads'] = {'DynamicLoad': model['loads']}
 
     ps = dps.PowerSystemModel(model=model)
     ps.init_dyn_sim()
 
     ps.ode_fun(0, ps.x0)
-    rts = RealTimeSimulator(ps, dt=2.5e-3, speed=1, solver=dps_sol.ModifiedEulerDAE)
+    rts = RealTimeSimulator(ps, dt=5e-3, speed=1, solver=dps_sol.ModifiedEulerDAE)
 
     rts_thread = threading.Thread(target=rts.main_loop, daemon=True)
     rts_thread.start()

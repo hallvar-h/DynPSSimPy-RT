@@ -65,41 +65,40 @@ class DynamicLoadControlWidget(QtWidgets.QWidget):
         self.sliders_G = []
         self.sliders_B = []
         for i, dyn_load in enumerate(self.load_mdl.par):
-            y_load_0 = self.load_mdl.y_load[i]
-            G_0 = y_load_0.real
-            B_0 = y_load_0.imag
+            # y_load_0 = self.load_mdl.y_load[i]
+            G_0 = self.load_mdl.g_setp(self.ps.x_0, self.ps.v_0)[i]
+            B_0 = self.load_mdl.b_setp(self.ps.x_0, self.ps.v_0)[i]
             
              # Add slider
             slider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self.ctrlWidget)
-            self.speed_slider = slider
+            self.sliders_G.append(slider)
             slider.setMinimum(1)
             slider.setMaximum(300)
             slider.valueChanged.connect(lambda state, i=i, target='G': self.updateLoad(i, target))
             slider.setAccessibleName(dyn_load['name'])
             slider.setValue(round(G_0*100))
             layout_box.addWidget(slider, i, 0)
-            self.sliders_G.append(slider)
+            
 
             slider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self.ctrlWidget)
-            self.speed_slider = slider
+            self.sliders_B.append(slider)
             slider.setMinimum(1)
             slider.setMaximum(300)
             slider.valueChanged.connect(lambda state, i=i, target='B': self.updateLoad(i, target))
             slider.setAccessibleName(dyn_load['name'])
             slider.setValue(round(B_0*100))
             layout_box.addWidget(slider, i, 1)
-            self.sliders_B.append(slider)
+            
 
         self.ctrlWidget.setLayout(layout_box)
         self.ctrlWidget.show()
 
     def updateLoad(self, load_idx, target):
-        print(load_idx, target)
-        y_prev = self.load_mdl.y_load[load_idx]
-        self.load_mdl.y_load[load_idx] = self.sliders_G[load_idx].value()/100 + 1j*self.sliders_B[load_idx].value()/100
-        #print(self.load_mdl.p(x, v)*self.rts.ps.s_n)
-        # self.ps.network_event('line', self.sender().accessibleName(), action)
-        #print('t={:.2f}s'.format(self.rts.sol.t) + ': Line ' + self.sender().accessibleName() + ' '+ action + 'ed.')
+        # print(load_idx, target, len(self.sliders_G), len(self.sliders_B))
+        if target == 'G':
+            self.load_mdl.set_input('g_setp', self.sliders_G[load_idx].value()/100, load_idx)
+        else:
+            self.load_mdl.set_input('b_setp', self.sliders_B[load_idx].value()/100, load_idx)
 
 
 class SimulationControl(QtWidgets.QWidget):
