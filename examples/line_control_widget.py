@@ -17,7 +17,7 @@ def main(rts):
     app = QtWidgets.QApplication(sys.argv)
 
     sync_plot = SyncPlot(rts=rts, n_samples=1000, update_freq=25)
-    voltage_phasor_plot = VoltagePhasorPlot(rts, update_freq=50)
+    voltage_phasor_plot = VoltagePhasorPlot(rts, update_freq=25)
     grid_plot = LiveGridPlot3D(rts=rts, z_ax='angle')
 
     sync_plot.start()

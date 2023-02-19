@@ -35,6 +35,7 @@ class PhasorPlot(QtWidgets.QWidget):
         angle = np.zeros(self.n_phasors)
         magnitude = np.ones(self.n_phasors)
         phasors = magnitude*np.exp(1j*angle)
+        self.phasors = phasors
 
         self.pl_ph = []
 
@@ -50,9 +51,10 @@ class PhasorPlot(QtWidgets.QWidget):
 
         self.graphWidget.show()
 
-        # self.timer = QtCore.QTimer()
-        # self.timer.timeout.connect(self.update)
-        # self.timer.start(1000//update_freq)
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.update_plot)
+        self.timer.start(1000//update_freq)
+        
 
     def update(self, phasors):
         # if not np.isclose(self.ts_keeper.time[-1], self.ps.time):
@@ -61,7 +63,10 @@ class PhasorPlot(QtWidgets.QWidget):
         # angle -= np.mean(angle)
         # magnitude = np.concatenate([gen_mdl.input['E_f'] for gen_mdl in self.ps.gen_mdls.values()])
         # phasors = magnitude * np.exp(1j * angle)
-        for i, (pl_ph, phasor) in enumerate(zip(self.pl_ph, phasors[:, None]*self.phasor_0)):
+        self.phasors = phasors
+
+    def update_plot(self):
+        for i, (pl_ph, phasor) in enumerate(zip(self.pl_ph, self.phasors[:, None]*self.phasor_0)):
             pl_ph.setData(phasor.real, phasor.imag)
 
 

@@ -119,11 +119,12 @@ def main():
     rts = RealTimeSimulatorThread(ps, dt=5e-3, speed=1, solver=dps_sol.ModifiedEulerDAE)
     app = QtWidgets.QApplication(sys.argv)
 
-    tw_plot = GenSpeedPlot(rts=rts, n_samples=1000, update_freq=25)
-    sync_plot = SyncPlot(rts=rts, n_samples=1000, update_freq=25)
-    voltage_phasor_plot = VoltagePhasorPlot(rts, update_freq=25)
-    voltage_angle_plot = VoltageAnglePlot(rts, update_freq=25)
-    voltage_mean_angle_plot = VoltageMeanAnglePlot(rts, update_freq=25)
+    update_freq = 25
+    tw_plot = GenSpeedPlot(rts=rts, n_samples=1000, update_freq=update_freq)
+    sync_plot = SyncPlot(rts=rts, n_samples=1000, update_freq=update_freq)
+    voltage_phasor_plot = VoltagePhasorPlot(rts, update_freq=update_freq)
+    voltage_angle_plot = VoltageAnglePlot(rts, update_freq=update_freq)
+    voltage_mean_angle_plot = VoltageMeanAnglePlot(rts, update_freq=update_freq)
     # sync_plot_2 = SyncPlot(n_samples=1000, update_freq=10)
     time.sleep(1)
     rts.start()
