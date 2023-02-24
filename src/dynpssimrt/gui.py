@@ -64,30 +64,38 @@ class DynamicLoadControlWidget(QtWidgets.QWidget):
         self.load_mdl = self.ps.loads['DynamicLoad']
         self.sliders_G = []
         self.sliders_B = []
+
+        G_0 = self.load_mdl.g_setp(self.ps.x_0, self.ps.v_0)
+        B_0 = self.load_mdl.b_setp(self.ps.x_0, self.ps.v_0)
+        self.max_Y = max(max(abs(G_0)), max(abs(B_0)))
+        max_dev = 2
+        
         for i, dyn_load in enumerate(self.load_mdl.par):
-            # y_load_0 = self.load_mdl.y_load[i]
-            G_0 = self.load_mdl.g_setp(self.ps.x_0, self.ps.v_0)[i]
-            B_0 = self.load_mdl.b_setp(self.ps.x_0, self.ps.v_0)[i]
             
-             # Add slider
+            # Add text
+            label = QtWidgets.QLabel(dyn_load['name'] )
+            layout_box.addWidget(label, i, 0)
+            
+             
+            # Add slider, active power (conductance)
             slider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self.ctrlWidget)
             self.sliders_G.append(slider)
-            slider.setMinimum(1)
-            slider.setMaximum(300)
+            slider.setMinimum(-100*max_dev)
+            slider.setMaximum(100*max_dev)
             slider.valueChanged.connect(lambda state, i=i, target='G': self.updateLoad(i, target))
             slider.setAccessibleName(dyn_load['name'])
-            slider.setValue(round(G_0*100))
-            layout_box.addWidget(slider, i, 0)
+            slider.setValue(round(G_0[i]*100/self.max_Y))
+            layout_box.addWidget(slider, i, 1)
             
-
+            # Add slider, reactive power (susceptance)
             slider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self.ctrlWidget)
             self.sliders_B.append(slider)
-            slider.setMinimum(1)
-            slider.setMaximum(300)
+            slider.setMinimum(-100*max_dev)
+            slider.setMaximum(100*max_dev)
             slider.valueChanged.connect(lambda state, i=i, target='B': self.updateLoad(i, target))
             slider.setAccessibleName(dyn_load['name'])
-            slider.setValue(round(B_0*100))
-            layout_box.addWidget(slider, i, 1)
+            slider.setValue(round(B_0[i]*100/self.max_Y))
+            layout_box.addWidget(slider, i, 2)
             
 
         self.ctrlWidget.setLayout(layout_box)
@@ -96,9 +104,9 @@ class DynamicLoadControlWidget(QtWidgets.QWidget):
     def updateLoad(self, load_idx, target):
         # print(load_idx, target, len(self.sliders_G), len(self.sliders_B))
         if target == 'G':
-            self.load_mdl.set_input('g_setp', self.sliders_G[load_idx].value()/100, load_idx)
+            self.load_mdl.set_input('g_setp', self.sliders_G[load_idx].value()*self.max_Y/100, load_idx)
         else:
-            self.load_mdl.set_input('b_setp', self.sliders_B[load_idx].value()/100, load_idx)
+            self.load_mdl.set_input('b_setp', self.sliders_B[load_idx].value()*self.max_Y/100, load_idx)
 
 
 class SimulationControl(QtWidgets.QWidget):

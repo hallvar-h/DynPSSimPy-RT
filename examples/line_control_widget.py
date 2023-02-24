@@ -36,8 +36,7 @@ def main(rts):
 if __name__ == '__main__':
 
     import dynpssimpy.ps_models.ieee39 as model_data
-    # import ps_models.ieee39 as model_data
-    # import ps_models.sm_ib as model_data
+    # import dynpssimpy.ps_models.n44 as model_data
 
     model = model_data.load()
     model['loads'] = {'DynamicLoad': model['loads']}
