@@ -109,6 +109,68 @@ class DynamicLoadControlWidget(QtWidgets.QWidget):
             self.load_mdl.set_input('b_setp', self.sliders_B[load_idx].value()*self.max_Y/100, load_idx)
 
 
+class VSCControlWidget(QtWidgets.QWidget):
+    def __init__(self, rts, max_dev=2, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.rts = rts
+        self.ps = rts.ps
+
+        # Controls
+        self.ctrlWidget = QtWidgets.QWidget()
+        self.ctrlWidget.setWindowTitle('VSCControlWidget')
+
+        layout_box = QtWidgets.QGridLayout()
+        self.check_boxes = []
+        self.target_mdl = self.ps.vsc['VSC']
+        self.active_power_setp_fun = 'P_setp'
+        self.reactive_power_setp_fun = 'Q_setp'
+
+        self.sliders_active_power = []
+        self.sliders_reactive_power = []
+
+        active_power_0 = getattr(self.target_mdl, self.active_power_setp_fun)(self.ps.x_0, self.ps.v_0)
+        reactive_power_0 = getattr(self.target_mdl, self.reactive_power_setp_fun)(self.ps.x_0, self.ps.v_0)
+        self.max_S = max(max(abs(active_power_0)), max(abs(reactive_power_0)))
+        
+        for i, mdl in enumerate(self.target_mdl.par):
+            
+            # Add text
+            label = QtWidgets.QLabel(mdl['name'] )
+            layout_box.addWidget(label, i, 0)
+            
+            # Add slider, active power (conductance)
+            slider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self.ctrlWidget)
+            self.sliders_active_power.append(slider)
+            slider.setMinimum(-100*max_dev)
+            slider.setMaximum(100*max_dev)
+            slider.valueChanged.connect(lambda state, i=i, target='active': self.updateLoad(i, target))
+            slider.setAccessibleName(mdl['name'])
+            slider.setValue(round(active_power_0[i]*100/self.max_S))
+            layout_box.addWidget(slider, i, 1)
+            
+            # Add slider, reactive power (susceptance)
+            slider = QtWidgets.QSlider(QtCore.Qt.Horizontal, self.ctrlWidget)
+            self.sliders_reactive_power.append(slider)
+            slider.setMinimum(-100*max_dev)
+            slider.setMaximum(100*max_dev)
+            slider.valueChanged.connect(lambda state, i=i, target='reactive': self.updateLoad(i, target))
+            slider.setAccessibleName(mdl['name'])
+            slider.setValue(round(reactive_power_0[i]*100/self.max_S))
+            layout_box.addWidget(slider, i, 2)
+            
+
+        self.ctrlWidget.setLayout(layout_box)
+        self.ctrlWidget.show()
+
+    def updateLoad(self, idx, target):
+        # print(load_idx, target, len(self.sliders_G), len(self.sliders_B))
+        if target == 'active':
+            self.target_mdl.set_input(self.active_power_setp_fun, self.sliders_active_power[idx].value()*self.max_S/100, idx)
+        else:
+            self.target_mdl.set_input(self.reactive_power_setp_fun, self.sliders_reactive_power[idx].value()*self.max_S/100, idx)
+
+
 class SimulationControl(QtWidgets.QWidget):
     def __init__(self, rts, *args, **kwargs):
         super().__init__(*args, **kwargs)

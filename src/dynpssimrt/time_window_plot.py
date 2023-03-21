@@ -5,7 +5,7 @@ import pyqtgraph as pg
 
 
 class TimeWindowPlot(TimeWindow):
-    def __init__(self, update_freq=25, title='', *args, **kwargs):
+    def __init__(self, update_freq=25, title='', max_plots=10, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.graphWidget = pg.GraphicsLayoutWidget(show=True, title=title)
@@ -17,7 +17,7 @@ class TimeWindowPlot(TimeWindow):
 
         self.plotWidget = self.graphWidget.addPlot()
         self.pl = []
-        for i in range(min(10, self.n_cols)):
+        for i in range(min(max_plots, self.n_cols)):
             pen = pg.mkPen(color=self.colors(i), width=2)
             pl = self.plotWidget.plot(self.get_time(), np.zeros(self.n_samples), pen=pen)
             self.pl.append(pl)
