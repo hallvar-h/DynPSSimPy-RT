@@ -4,7 +4,7 @@ from synchrophasor.simplePMU import SimplePMU
 from .pmu import PMUPublisher
 
 
-class PMUPublisherCurrents(PMUPublisher):
+class PMUPublisherCurrentsFreq(PMUPublisher):
     def __init__(self, *args, stations=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.stations = stations
@@ -12,6 +12,17 @@ class PMUPublisherCurrents(PMUPublisher):
 
     @staticmethod
     def get_init_data(rts):
+        if not hasattr(rts.ps, 'pll'):
+            rts.ps.add_model_data({'pll':{
+                'PLL1': [
+                    ['name',        'T_filter',     'bus'   ],
+                    *[[f'PLL{i}',    0.1,            bus_name  ] for i, bus_name in enumerate(rts.ps.buses['name'])],
+                ],
+                'PLL2': [
+                    ['name',        'K_p',  'K_i',  'bus'   ],
+                    *[[f'PLL{i}',    10,     1,      bus_name  ] for i, bus_name in enumerate(rts.ps.buses['name'])],
+                ]
+            }})
         return [rts.ps.buses, rts.ps.lines['Line'].par, rts.ps.trafos['Trafo'].par]
 
     def initialize(self, init_data):
@@ -74,7 +85,10 @@ class PMUPublisherCurrents(PMUPublisher):
         trafo_currents_from = rts.ps.trafos['Trafo'].i_from(rts.sol.x, rts.sol.v)
         trafo_currents_to = rts.ps.trafos['Trafo'].i_to(rts.sol.x, rts.sol.v)
 
-        return [rts.sol.t, v_full, line_currents_from, line_currents_to, trafo_currents_from, trafo_currents_to]
+        pll_mdl = rts.ps.pll['PLL2']
+        freq_est = pll_mdl.freq_est(rts.sol.x, rts.sol.v)
+
+        return [rts.sol.t, v_full, line_currents_from, line_currents_to, trafo_currents_from, trafo_currents_to, freq_est]
 
     @staticmethod
     def complex2pol(vec):
@@ -82,11 +96,12 @@ class PMUPublisherCurrents(PMUPublisher):
 
     def update(self, input_signal):
         if self.pmu.pmu.clients:  # Check if there is any connected PDCs
-            t, v, line_currents_from, line_currents_to, trafo_currents_from, trafo_currents_to = input_signal
+            t, v, line_currents_from, line_currents_to, trafo_currents_from, trafo_currents_to, freq_est = input_signal
 
             time_stamp = round(t * 1e3) * 1e-3
 
             phasors = []
+            freq_data = []
             for mask_v, line_mask_from, line_mask_to, trafo_mask_from, trafo_mask_to in zip(
                 self.bus_masks,
                 self.line_masks_from,
@@ -95,6 +110,7 @@ class PMUPublisherCurrents(PMUPublisher):
                 self.trafo_masks_to
             ):
                 v_pol = self.complex2pol([v[mask_v]])
+                freq_data.append(freq_est[mask_v] + 50)
                 
                 line_from_pol = self.complex2pol(line_currents_from[line_mask_from])
                 line_to_pol = self.complex2pol(line_currents_to[line_mask_to])
@@ -105,5 +121,4 @@ class PMUPublisherCurrents(PMUPublisher):
                 phasors.append([*v_pol, *line_from_pol, *line_to_pol, *trafo_from_pol, *trafo_to_pol])
 
             # Publish C37.118-snapshot
-            # pmu_data = [[(mag, ang)] for mag, ang in zip(np.abs(v), np.angle(v))]
-            self.pmu.publish(time_stamp, phasors)
+            self.pmu.publish(time_stamp, phasors, freq_data)
