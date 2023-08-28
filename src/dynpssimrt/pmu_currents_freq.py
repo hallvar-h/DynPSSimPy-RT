@@ -12,17 +12,6 @@ class PMUPublisherCurrentsFreq(PMUPublisher):
 
     @staticmethod
     def get_init_data(rts):
-        if not hasattr(rts.ps, 'pll'):
-            rts.ps.add_model_data({'pll':{
-                'PLL1': [
-                    ['name',        'T_filter',     'bus'   ],
-                    *[[f'PLL{i}',    0.1,            bus_name  ] for i, bus_name in enumerate(rts.ps.buses['name'])],
-                ],
-                'PLL2': [
-                    ['name',        'K_p',  'K_i',  'bus'   ],
-                    *[[f'PLL{i}',    10,     1,      bus_name  ] for i, bus_name in enumerate(rts.ps.buses['name'])],
-                ]
-            }})
         return [rts.ps.buses, rts.ps.lines['Line'].par, rts.ps.trafos['Trafo'].par]
 
     def initialize(self, init_data):
@@ -87,6 +76,9 @@ class PMUPublisherCurrentsFreq(PMUPublisher):
 
         pll_mdl = rts.ps.pll['PLL2']
         freq_est = pll_mdl.freq_est(rts.sol.x, rts.sol.v)
+        pll_mdl.v_measured(rts.sol.x, rts.sol.v)
+        pll_mdl.bus_idx['terminal']
+        rts.sol.v
 
         return [rts.sol.t, v_full, line_currents_from, line_currents_to, trafo_currents_from, trafo_currents_to, freq_est]
 
@@ -110,7 +102,7 @@ class PMUPublisherCurrentsFreq(PMUPublisher):
                 self.trafo_masks_to
             ):
                 v_pol = self.complex2pol([v[mask_v]])
-                freq_data.append(freq_est[mask_v] + 50)
+                freq_data.append((freq_est[mask_v] + 1)*50)
                 
                 line_from_pol = self.complex2pol(line_currents_from[line_mask_from])
                 line_to_pol = self.complex2pol(line_currents_to[line_mask_to])
