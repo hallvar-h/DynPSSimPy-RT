@@ -1,10 +1,10 @@
 import multiprocessing as mp
-from dynpssimrt.interfacing import QueueManager, InterfaceListener
+from topsrt.interfacing import QueueManager, InterfaceListener
 import sys
-import dynpssimpy.dynamic as dps
-from dynpssimrt.sim import RealTimeSimulatorThread
-# from dynpssimrt.pmu import PMUPublisher
-from dynpssimrt.pmu_currents import PMUPublisherCurrents as PMUPublisher
+import tops.dynamic as dps
+from topsrt.sim import RealTimeSimulatorThread
+# from topsrt.pmu import PMUPublisher
+from topsrt.pmu_currents import PMUPublisherCurrents as PMUPublisher
 from synchrophasor.test_utils import run_pdc
 import time
 import socket
@@ -30,9 +30,9 @@ def main(qm_kwargs):
     init_queue = manager.get_init_queue()
     interface_listener = InterfaceListener(init_queue)
 
-    # import dynpssimpy.ps_models.k2a as model_data
+    # import tops.ps_models.k2a as model_data
     # import examples.test_systems.n44_ctrl as model_data
-    import dynpssimpy.ps_models.ieee39 as model_data
+    import tops.ps_models.ieee39 as model_data
 
     model = model_data.load()
 

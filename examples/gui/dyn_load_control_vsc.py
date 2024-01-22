@@ -1,16 +1,16 @@
-import dynpssimpy.dynamic as dps
-import dynpssimpy.solvers as dps_sol
-from dynpssimrt.sim import RealTimeSimulator
+import tops.dynamic as dps
+import tops.solvers as dps_sol
+from topsrt.sim import RealTimeSimulator
 import threading
 import time
 import sys
 from PySide6 import QtWidgets
-from dynpssimrt.gui import LineOutageWidget, VSCControlWidget
-from dynpssimrt.time_window_plot import TimeWindowPlot
-from dynpssimrt.rtsim_plot import SyncPlot
-from dynpssimrt.plotting.phasor_plots import VoltagePhasorPlot
-from dynpssimrt.plotting.grid_plot import LiveGridPlot3D
-from dynpssimrt.rtsim_plot import RTSimPlot, SyncPlot
+from topsrt.gui import LineOutageWidget, VSCControlWidget
+from topsrt.time_window_plot import TimeWindowPlot
+from topsrt.rtsim_plot import SyncPlot
+from topsrt.plotting.phasor_plots import VoltagePhasorPlot
+from topsrt.plotting.grid_plot import LiveGridPlot3D
+from topsrt.rtsim_plot import RTSimPlot, SyncPlot
 
 
 class LoadActivePowerPlot(RTSimPlot):
@@ -55,8 +55,8 @@ def main(rts):
 
 if __name__ == '__main__':
 
-    import dynpssimpy.ps_models.k2a as model_data
-    # import dynpssimpy.ps_models.n44 as model_data
+    import tops.ps_models.k2a as model_data
+    # import tops.ps_models.n44 as model_data
 
     model = model_data.load()
     # model['vsc'] = {'VSC': [

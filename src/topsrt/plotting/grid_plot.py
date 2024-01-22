@@ -3,10 +3,10 @@ import numpy as np
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtCore
 import pyqtgraph.opengl as gl
-import dynpssimpy.utility_functions as dps_uf
+import tops.utility_functions as dps_uf
 import networkx as nx
 import time
-from dynpssimrt.interfacing import InterfacerQueuesThread
+from topsrt.interfacing import InterfacerQueuesThread
 
 
 class GridPlot3D(QtWidgets.QWidget):

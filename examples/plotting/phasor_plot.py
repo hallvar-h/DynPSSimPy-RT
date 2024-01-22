@@ -1,15 +1,15 @@
-import dynpssimpy.dynamic as dps
-import dynpssimpy.solvers as dps_sol
-from dynpssimrt.sim import RealTimeSimulator, RealTimeSimulatorThread
+import tops.dynamic as dps
+import tops.solvers as dps_sol
+from topsrt.sim import RealTimeSimulator, RealTimeSimulatorThread
 import threading
 import time
 import sys
 from PySide6 import QtWidgets
-from dynpssimrt.gui import LineOutageWidget, SimulationControl
-from dynpssimrt.time_window_plot import TimeWindowPlot
-from dynpssimrt.rtsim_plot import RTSimPlot, SyncPlot
-from dynpssimrt.plotting.phasor_plots import VoltagePhasorPlot
-from dynpssimrt.interfacing import InterfacerQueuesThread
+from topsrt.gui import LineOutageWidget, SimulationControl
+from topsrt.time_window_plot import TimeWindowPlot
+from topsrt.rtsim_plot import RTSimPlot, SyncPlot
+from topsrt.plotting.phasor_plots import VoltagePhasorPlot
+from topsrt.interfacing import InterfacerQueuesThread
 import numpy as np
 
 
@@ -108,7 +108,7 @@ class VoltageMeanAnglePlot(TimeWindowPlot, InterfacerQueuesThread):
 
 
 def main():
-    import dynpssimpy.ps_models.k2a as model_data
+    import tops.ps_models.k2a as model_data
 
     model = model_data.load()
 

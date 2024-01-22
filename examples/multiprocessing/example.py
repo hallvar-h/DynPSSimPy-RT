@@ -1,14 +1,14 @@
 import multiprocessing as mp
-from dynpssimrt.interfacing import QueueManager, InterfaceListener
+from topsrt.interfacing import QueueManager, InterfaceListener
 from PySide6 import QtWidgets
-from dynpssimrt.rtsim_plot import SyncPlot
+from topsrt.rtsim_plot import SyncPlot
 import sys
-from dynpssimrt.rtsim_plot import RTSimPlot
-import dynpssimpy.dynamic as dps
-from dynpssimrt.sim import RealTimeSimulatorThread
-from dynpssimrt.gui import LineOutageWidget, ConsoleWidget
-from dynpssimrt.plotting.phasor_plots import VoltagePhasorPlot, GenPhasorPlot
-from dynpssimrt.plotting.grid_plot import LiveGridPlot3D
+from topsrt.rtsim_plot import RTSimPlot
+import tops.dynamic as dps
+from topsrt.sim import RealTimeSimulatorThread
+from topsrt.gui import LineOutageWidget, ConsoleWidget
+from topsrt.plotting.phasor_plots import VoltagePhasorPlot, GenPhasorPlot
+from topsrt.plotting.grid_plot import LiveGridPlot3D
 
 
 def main_pod(qm_kwargs):
@@ -46,7 +46,7 @@ def main(qm_kwargs):
     init_queue = manager.get_init_queue()
     interface_listener = InterfaceListener(init_queue)
 
-    import dynpssimpy.ps_models.ieee39 as model_data
+    import tops.ps_models.ieee39 as model_data
 
     model = model_data.load()
 
@@ -81,8 +81,6 @@ def main_server(qm_kwargs):
 
 
 if __name__ == '__main__':
-    # __file__ = r'C:\Users\lokal_hallvhau\Dropbox\Python\DynPSSimPyDev\tests\dev\appod\mp_distr\working_case\two_processes\test3 - appod_mp_sim_only.py'
-
     # qm_kwargs = dict(address=('10.0.0.16', 50000), authkey=b'abracadabra')
     # qm_kwargs = dict(address=('192.168.11.110', 50000), authkey=b'abracadabra')
     import socket

@@ -1,13 +1,13 @@
-import dynpssimpy.dynamic as dps
-import dynpssimpy.solvers as dps_sol
-from dynpssimrt.sim import RealTimeSimulator
+import tops.dynamic as dps
+import tops.solvers as dps_sol
+from topsrt.sim import RealTimeSimulator
 import threading
 import time
 
 
 if __name__ == '__main__':
 
-    import dynpssimpy.ps_models.ieee39 as model_data
+    import tops.ps_models.ieee39 as model_data
     # import ps_models.ieee39 as model_data
     # import ps_models.sm_ib as model_data
 

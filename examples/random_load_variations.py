@@ -1,11 +1,11 @@
-import dynpssimpy.dynamic as dps
-import dynpssimpy.solvers as dps_sol
-from dynpssimrt.sim import RealTimeSimulatorThread
+import tops.dynamic as dps
+import tops.solvers as dps_sol
+from topsrt.sim import RealTimeSimulatorThread
 import sys
 from PySide6 import QtWidgets
-from dynpssimrt.gui import LineOutageWidget
-from dynpssimrt.rtsim_plot import RTSimPlot, SyncPlot
-from dynpssimrt.interfacing import InterfacerQueuesThread
+from topsrt.gui import LineOutageWidget
+from topsrt.rtsim_plot import RTSimPlot, SyncPlot
+from topsrt.interfacing import InterfacerQueuesThread
 import numpy as np
 from pyqtgraph.console import ConsoleWidget
 
@@ -64,7 +64,7 @@ def main():
     ip = socket.gethostbyname(socket.gethostname())
     port = 50000
 
-    import dynpssimpy.ps_models.k2a as model_data
+    import tops.ps_models.k2a as model_data
     model = model_data.load()
     # model['loads'] = {'DynamicLoadFiltered': model['loads']}
 

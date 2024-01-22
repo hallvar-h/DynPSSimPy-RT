@@ -1,4 +1,4 @@
-from src.dynpssimrt.time_window_plot import TimeWindowPlot
+from src.topsrt.time_window_plot import TimeWindowPlot
 from PySide6 import QtWidgets
 import sys
 import time

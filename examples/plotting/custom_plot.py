@@ -1,13 +1,13 @@
-import dynpssimpy.dynamic as dps
-import dynpssimpy.solvers as dps_sol
-from dynpssimrt.sim import RealTimeSimulator, RealTimeSimulatorThread
+import tops.dynamic as dps
+import tops.solvers as dps_sol
+from topsrt.sim import RealTimeSimulator, RealTimeSimulatorThread
 import threading
 import time
 import sys
 from PySide6 import QtWidgets
-from dynpssimrt.gui import LineOutageWidget, SimulationControl
-from dynpssimrt.time_window_plot import TimeWindowPlot
-from dynpssimrt.rtsim_plot import RTSimPlot, SyncPlot
+from topsrt.gui import LineOutageWidget, SimulationControl
+from topsrt.time_window_plot import TimeWindowPlot
+from topsrt.rtsim_plot import RTSimPlot, SyncPlot
 
 
 class GenSpeedPlot(RTSimPlot):
@@ -21,7 +21,7 @@ class GenSpeedPlot(RTSimPlot):
 
 
 def main():
-    import dynpssimpy.ps_models.ieee39 as model_data
+    import tops.ps_models.ieee39 as model_data
 
     model = model_data.load()
 

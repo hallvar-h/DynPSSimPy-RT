@@ -1,4 +1,4 @@
-import dynpssimpy.real_time_sim.utils as rts_utils
+import tops.real_time_sim.utils as rts_utils
 import multiprocessing
 from multiprocessing.managers import SyncManager
 import queue

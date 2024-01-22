@@ -1,4 +1,4 @@
-from dynpssimrt.interfacing import InterfacerQueuesThread
+from topsrt.interfacing import InterfacerQueuesThread
 from .components.phasors import PhasorPlot
 import numpy as np
 

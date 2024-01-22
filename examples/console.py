@@ -1,17 +1,17 @@
-import dynpssimpy.dynamic as dps
-import dynpssimpy.solvers as dps_sol
-from dynpssimrt.sim import RealTimeSimulator, RealTimeSimulatorThread
+import tops.dynamic as dps
+import tops.solvers as dps_sol
+from topsrt.sim import RealTimeSimulator, RealTimeSimulatorThread
 import sys
 from PySide6 import QtWidgets
-from dynpssimrt.gui import LineOutageWidget
-from dynpssimrt.rtsim_plot import RTSimPlot, SyncPlot
+from topsrt.gui import LineOutageWidget
+from topsrt.rtsim_plot import RTSimPlot, SyncPlot
 import pyqtgraph as pg
 from pyqtgraph.console import ConsoleWidget
 import numpy as np
 
 
 def main():
-    import dynpssimpy.ps_models.ieee39 as model_data
+    import tops.ps_models.ieee39 as model_data
 
     model = model_data.load()
 

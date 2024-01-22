@@ -3,15 +3,14 @@ import numpy as np
 import time
 import threading
 import importlib
-# sys.path.append(r'C:/Users/lokal_hallvhau/Dropbox/Python/DynPSSimPy/')
-import dynpssimpy.dynamic as dps
-import dynpssimpy.real_time_sim as dps_rts
+import tops.dynamic as dps
+# import tops.real_time_sim as dps_rts
 # from synchrophasor.frame import ConfigFrame2, DataFrame
 # from synchrophasor.pmu import Pmu, PmuError
 # import time
 # import random  # Can be removed?
-# import dynpssimpy.real_time_sim.utils as rts_utils
-import dynpssimpy.real_time_sim.interfacing as rts_if
+# import tops.real_time_sim.utils as rts_utils
+# import tops.real_time_sim.interfacing as rts_if
 # from time import sleep, time
 # from src.pypmu_fix.frame import *
 # import collections
@@ -104,7 +103,7 @@ if __name__ == '__main__':
     # Note that running this in interactive mode in PyCharm with Python 3.8 or 3.9
     # does not work. Multiprocessing Pool error? Works with Python 3.6.
     # Also, workaround for 3.8/3.9 is to set __file__ variable to an actual file.
-    __file__ = 'dynpssimpy/pmu_publisher.py'
+    __file__ = 'tops/pmu_publisher.py'
 
     ps.power_flow()
     ps.build_y_bus_red(ps.buses['name'])

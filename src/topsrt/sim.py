@@ -1,5 +1,5 @@
 import sys
-import dynpssimpy.solvers as dps_sol
+import tops.solvers as dps_sol
 import threading
 import time
 import multiprocessing

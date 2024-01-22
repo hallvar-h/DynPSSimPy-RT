@@ -1,5 +1,5 @@
-import dynpssimpy.real_time_sim.interfacing as rts_if
-import dynpssimpy.real_time_sim.utils as rts_utils
+import tops.real_time_sim.interfacing as rts_if
+import tops.real_time_sim.utils as rts_utils
 import numpy as np
 
 

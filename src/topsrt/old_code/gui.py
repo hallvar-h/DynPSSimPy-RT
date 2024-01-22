@@ -4,12 +4,12 @@ import numpy as np
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtGui, QtCore
 import pyqtgraph.opengl as gl
-import dynpssimpy.dynamic as dps
-import dynpssimpy.real_time_sim.apps as rts_apps
-import dynpssimpy.utility_functions as dps_uf
+import tops.dynamic as dps
+import tops.real_time_sim.apps as rts_apps
+import tops.utility_functions as dps_uf
 import importlib
 from pyqtconsole.console import PythonConsole
-import dynpssimpy.real_time_sim.sim as dps_rts
+import tops.real_time_sim.sim as dps_rts
 import networkx as nx
 import time
 

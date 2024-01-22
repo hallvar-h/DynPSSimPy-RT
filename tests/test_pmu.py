@@ -1,7 +1,7 @@
-import dynpssimpy.dynamic as dps
-import dynpssimpy.solvers as dps_sol
-from dynpssimrt.sim import RealTimeSimulatorThread
-from dynpssimrt.pmu_currents import PMUPublisherCurrents as PMUPublisher
+import tops.dynamic as dps
+import tops.solvers as dps_sol
+from topsrt.sim import RealTimeSimulatorThread
+from topsrt.pmu_currents import PMUPublisherCurrents as PMUPublisher
 from synchrophasor.test_utils import run_pdc
 import time
 import socket
@@ -10,7 +10,7 @@ import multiprocessing as mp
 
 def main(ip, port, pdc_id):
 
-    import dynpssimpy.ps_models.k2a as model_data
+    import tops.ps_models.k2a as model_data
     model = model_data.load()
 
     ps = dps.PowerSystemModel(model=model)
