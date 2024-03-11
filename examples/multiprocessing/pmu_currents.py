@@ -51,6 +51,19 @@ def main(qm_kwargs):
     model = model_data.load()
 
     ps = dps.PowerSystemModel(model=model)
+
+    if not hasattr(ps, 'pll'):
+        ps.add_model_data({'pll':{
+            'PLL1': [
+                ['name',        'T_filter',     'bus'   ],
+                *[[f'PLL{i}',    0.1,            bus_name  ] for i, bus_name in enumerate(ps.buses['name'])],
+            ],
+            'PLL2': [
+                ['name',        'K_p',  'K_i',  'bus'   ],
+                *[[f'PLL{i}',    10,     1,      bus_name  ] for i, bus_name in enumerate(ps.buses['name'])],
+            ]
+        }})
+        
     ps.init_dyn_sim()
 
     ps.ode_fun(0, ps.x0)

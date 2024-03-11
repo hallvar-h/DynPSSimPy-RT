@@ -67,18 +67,20 @@ class PMUPublisherCurrentsFreq(PMUPublisher):
     @staticmethod
     def read_input_signal(rts):
         # Specify how input signal is read in RealTimeSimulator
-        v_full = rts.ps.red_to_full.dot(rts.sol.v)
-        line_currents_from = rts.ps.lines['Line'].i_from(rts.sol.x, rts.sol.v)
-        line_currents_to = rts.ps.lines['Line'].i_to(rts.sol.x, rts.sol.v)
+        v_full = rts.ps.red_to_full.dot(rts.sol.v)*rts.ps.buses['V_n']*1e3
+        line_currents_from = rts.ps.lines['Line'].I_from(rts.sol.x, rts.sol.v)*1e3
+        line_currents_to = rts.ps.lines['Line'].I_to(rts.sol.x, rts.sol.v)*1e3
+        abs(line_currents_to)
+        abs(rts.ps.lines['Line'].i_to(rts.sol.x, rts.sol.v))
 
-        trafo_currents_from = rts.ps.trafos['Trafo'].i_from(rts.sol.x, rts.sol.v)
-        trafo_currents_to = rts.ps.trafos['Trafo'].i_to(rts.sol.x, rts.sol.v)
+        trafo_currents_from = rts.ps.trafos['Trafo'].I_from(rts.sol.x, rts.sol.v)*1e3
+        trafo_currents_to = rts.ps.trafos['Trafo'].I_to(rts.sol.x, rts.sol.v)*1e3
 
         pll_mdl = rts.ps.pll['PLL2']
         freq_est = pll_mdl.freq_est(rts.sol.x, rts.sol.v)
-        pll_mdl.v_measured(rts.sol.x, rts.sol.v)
-        pll_mdl.bus_idx['terminal']
-        rts.sol.v
+        # pll_mdl.v_measured(rts.sol.x, rts.sol.v)
+        # pll_mdl.bus_idx['terminal']
+        # rts.sol.v
 
         return [rts.sol.t, v_full, line_currents_from, line_currents_to, trafo_currents_from, trafo_currents_to, freq_est]
 
