@@ -40,7 +40,7 @@ class PMUPublisherCurrentsFreq(PMUPublisher):
             self.line_masks_to.append(line_bus_idx_to)
             
             line_names_from = [f'I[{name}]' for name in line_data['name'][line_bus_idx_from]]
-            line_names_to = [f'I[{name}]r' for name in line_data['name'][line_bus_idx_to]]
+            line_names_to = [f'I[{name}]' for name in line_data['name'][line_bus_idx_to]]
 
             # Get line currents belonging to station
             trafo_bus_idx_from = np.where(trafo_data['from_bus'] == station_name)[0]
