@@ -7,11 +7,12 @@ import types
 
 
 class InterfacerQueues:
-    def __init__(self, rts=None, name='InterfacerQueues', fs=None, *args, **kwargs):
+    def __init__(self, rts=None, name='InterfacerQueues', fs=None, wait_for_interface=False):
         self._stopped = False
         self.interface_name = name
         self.interface_name_unique = name
         self.fs = fs
+        self.wait_for_interface = wait_for_interface
 
         if rts is not None:
             self.connect(rts)
@@ -42,7 +43,8 @@ class InterfacerQueues:
             read_input_signal=self.read_input_signal,
             apply_ctrl_signal=self.apply_ctrl_signal,
             output_stream=self.result_stream,
-            input_stream=self.ctrl_stream
+            input_stream=self.ctrl_stream,
+            wait_for_interface=self.wait_for_interface,
         )
         if interface_name_unique in rts.interface_functions.keys():
             print('Warning: Two or more interfaces with name {} connected. Previous interfaces will be overwritten.')
@@ -82,7 +84,7 @@ class InterfacerQueues:
         pass
 
     @staticmethod
-    def interface_fun(rts, name, frequency, read_input_signal, apply_ctrl_signal, output_stream, input_stream):
+    def interface_fun(rts, name, frequency, read_input_signal, apply_ctrl_signal, output_stream, input_stream, wait_for_interface):
         if frequency:
             if rts.sol.t < rts.interface_timers[name]:
                 return
@@ -90,16 +92,21 @@ class InterfacerQueues:
                 rts.interface_timers[name] += 1 / frequency
         # Apply control
         try:
-            ctrl = input_stream.get_nowait()
+            if wait_for_interface:
+                ctrl = input_stream.get()
+            else:
+                ctrl = input_stream.get_nowait()
             apply_ctrl_signal(rts, ctrl)
         except queue.Empty:
             pass
 
         input = read_input_signal(rts)
-        try:
-            output_stream.get_nowait()
-        except queue.Empty:
-            pass
+        if not wait_for_interface:
+            # Not waiting, so remove any previous elements in queue (make sure only newest is left)
+            try:
+                output_stream.get_nowait()
+            except queue.Empty:
+                pass
 
         output_stream.put(input)
 
@@ -147,56 +154,6 @@ class InterfacerQueuesProcess(MakeProcess, InterfacerQueues):
     def __init__(self, *args, **kwargs):
         InterfacerQueues.__init__(self, *args, **kwargs)
         MakeProcess.__init__(self, *args, **kwargs)
-
-
-class InterfacerDirect:
-    def __init__(self, rts=None, name='InterfacerDirect'):
-        if rts:
-            self.connect(rts)
-
-        self.interface_name = name
-        self.fs = None
-        if self.fs:
-            self._timer = 0
-
-    def connect(self, rts):
-        rts.interface_functions[self.interface_name] = self.interface_fun
-
-    def interface_fun(self, rts):
-        if self.fs:
-            if rts.sol.t < self._timer:
-                return
-            else:
-                self._timer += 1 / self.fs
-
-        self.update(self.read_input_signal(rts))
-        self.apply_ctrl_signal(rts, self.generate_ctrl_signal())
-
-    def read_input_signal(self, rts):
-        # Read input from RealTimeSimulator
-        pass
-
-    def apply_ctrl_signal(self, rts, ctrl_signal):
-        # Apply control in RealTimeSimulator
-        pass
-
-    def generate_ctrl_signal(self):
-        # Generate control signal from internal states
-        pass
-
-    def update(self, input):
-        # Update internal states
-        pass
-
-    # start, stop and join methods are included to avoid error when used alongside threads/processes.
-    def start(self):
-        pass
-
-    def stop(self):
-        pass
-
-    def join(self):
-        pass
 
 
 class InterfaceListener(MakeThread):
@@ -283,6 +240,7 @@ class InterfaceListener(MakeThread):
             frequency=interface.fs,
             output_stream=interface.result_stream,
             input_stream=interface.ctrl_stream,
+            wait_for_interface=interface.wait_for_interface,
         )
 
         init_queue = manager.get_init_queue()
