@@ -49,7 +49,7 @@ class LineOutageWidget(QtWidgets.QWidget):
 
 
 class DynamicLoadControlWidget(QtWidgets.QWidget):
-    def __init__(self, rts, *args, **kwargs):
+    def __init__(self, rts, load_type='DynamicLoad', *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.rts = rts
@@ -61,7 +61,7 @@ class DynamicLoadControlWidget(QtWidgets.QWidget):
 
         layout_box = QtWidgets.QGridLayout()
         self.check_boxes = []
-        self.load_mdl = self.ps.loads['DynamicLoad']
+        self.load_mdl = self.ps.loads[load_type]
         self.sliders_G = []
         self.sliders_B = []
 
